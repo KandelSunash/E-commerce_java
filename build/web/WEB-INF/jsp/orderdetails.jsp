@@ -39,6 +39,7 @@
                             <th>Customer Name</th>
                             <th>Shipping Address</th>
                             <th>Status</th>
+                            <th>Action</th>
                             <!--<th>Actions</th>-->
                         </tr>
                     </thead>   
@@ -55,11 +56,11 @@
                                 <td class="center">
                                     <span class="label ${x.order.order_status==1?"label-warning":"label-success"}">${x.order.order_status==1?"Pending":"Delivered"}</span>
                                 </td><!--
-                                <td>
+-->                                <td>
                                     <div class="btn-group">
-                                        <button class="btn btn-primary">Option</button>
-                                        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
-                                        <ul class="dropdown-menu">
+                                        <a href="${pageContext.servletContext.contextPath}/cpanel/deliver?id=${x.order.id}&status=${x.order.order_status==1?0:1}"><button class="btn ${x.order.order_status==1?"btn-success":"btn-danger"}">${x.order.order_status==0?"Postpone Delivery":"Verify Delivery"}</button>
+                                        <!--<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>-->
+<!--                                        <ul class="dropdown-menu">
                                             <li><a class="btn btn-info" href="\\${pageContext.servletContext.contextPath}/manufacture/updatemanufacture?id=${x.id}">
                                                     <i class="halflings-icon white edit"></i>Update  
                                                 </a></li>
@@ -67,9 +68,9 @@
                                                     <i class="halflings-icon white trash"></i> Delete
                                                 </a>
                                             </li>
-                                        </ul>
+                                        </ul>-->
                                     </div>
-                                </td>-->
+                                </td>
                             </tr>
                         </c:forEach>
 

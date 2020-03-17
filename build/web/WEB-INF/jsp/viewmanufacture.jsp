@@ -55,10 +55,10 @@
                                             <li><a class="btn btn-info" href="${pageContext.servletContext.contextPath}/manufacture/updatemanufacture?id=${x.id}">
                                                     <i class="halflings-icon white edit"></i>Update  
                                                 </a></li>
-<!--                                            <li><a class="btn btn-warning" href="${pageContext.servletContext.contextPath}/category/deletecategory?id=${x.id}" onclick="return confirm('Are you sure you want delete?')">
+                                            <li><a class="btn btn-warning" href="${pageContext.servletContext.contextPath}/manufacture/deletemanufacture?id=${x.id}" onclick="return confirm('Are you sure you want delete?')">
                                                     <i class="halflings-icon white trash"></i> Delete
                                                 </a>
-                                            </li>-->
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>

@@ -23,7 +23,13 @@ public interface Category_interf  {
     //View Category
     public List<Category_entity> getallcategory();
     public Category_entity getbycategoryid(int id);
+    public Sub_category_entity getbysubcategoryid(int id);
     public Category_entity getbycategoryname(String category);
+    public List<Sub_category_entity> getallsubcategory();
     //Update Category
     boolean updatecategory(Category_entity cae);
+    boolean updatesubcategory(Sub_category_entity sub);
+    //Delete Category
+    boolean deletecategory(int id);
+    boolean deletesubcategory(int id);
 }

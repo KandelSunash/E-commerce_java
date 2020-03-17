@@ -16,6 +16,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,21 +36,78 @@ import org.springframework.web.multipart.MultipartFile;
 public class Main_Controller {
 
     @Autowired
-    Admin_interf dao;
+    JavaMailSender mailSender;
+
     @Autowired
-    BCryptPasswordEncoder encoder;
+    Admin_interf dao;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @RequestMapping("/")
     public String index() {
         return "index";
     }
 
-    @RequestMapping("dashboard")
+    @RequestMapping("/forgotpassword")
+    public String forgotpassword() {
+        return "forgotpassword";
+    }
+
+    @RequestMapping("/_forgotpassword")
+    public String _forgotpassword(HttpSession ses, @RequestParam("email") String email, Model md) {
+        Admin_entity ad = dao.checkemail(email);
+        if (ad != null) {
+            ses.setAttribute("email", ad.getEmail());
+            ses.setAttribute("admin_id", ad.getAdmin_id());
+            int code = (int) (Math.random() * 1000000);
+            code = Math.round(code);
+            ses.setAttribute("code", code);
+            SimpleMailMessage email1 = new SimpleMailMessage();
+            try {
+                email1.setTo(email);
+                email1.setSubject("6 digit code for recovery your account");
+                email1.setText(code + "");
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            mailSender.send(email1);
+            md.addAttribute("msg", "Confirmation code send succesfully");
+            return "otpconfirmation";
+        } else {
+            md.addAttribute("msg", "Email is not valid");
+            return "redirect:/cpanel/forgetpassword";
+        }
+    }
+
+    @RequestMapping("/_otpconfirm")
+    public String otpconfirm(HttpSession ses, @RequestParam("otp") int otp, Model md) {
+        int code = Integer.parseInt(ses.getAttribute("code").toString());
+        if (code == otp) {
+            return "changepassword";
+        } else {
+            md.addAttribute("msg", "Code donot match");
+            return "otpconfirmation";
+        }
+    }
+    @RequestMapping("/_changepassword")
+    public String changepassword(HttpSession ses, @RequestParam("password") String pass, Model md) {
+        int id = Integer.parseInt(ses.getAttribute("admin_id").toString());
+        String encodepass=encoder.encode(pass);
+        if(dao.chagepassword(encodepass, id)){
+        return "redirect:/cpanel/";
+        }else{
+            return "changepassword";
+        }
+    }
+
+    @RequestMapping("/dashboard")
     public String dashboard(HttpSession ses) {
         if (ses.getAttribute("username") != null) {
             return "dashboard";
         } else {
-            return "index";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -58,7 +117,7 @@ public class Main_Controller {
         if (ses.getAttribute("username") != null) {
             return "addadmin";
         } else {
-            return "index";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -90,7 +149,7 @@ public class Main_Controller {
 
             return "redirect:/cpanel/addadmin";
         } else {
-            return "index";
+            return "redirect:/cpanel/";
         }
     }
 //Admin Login
@@ -123,7 +182,7 @@ public class Main_Controller {
                         }
                         return "redirect:/capnel/dashboard";
                     }
-                    return "index";
+                    return "redirect:/cpanel/";
                 } else {
                     int attempt = dao.getattempt(ld);
                     if (attempt < 3) {
@@ -138,16 +197,16 @@ public class Main_Controller {
                         }
                     }
                     md.addAttribute("msg", "Wrong Password. Click on Forgot Password Or You will be block After 3rd attempt");
-                    return "index";
+                    return "redirect:/cpanel/";
                 }
 
             } else {
                 md.addAttribute("msg", "Your Account is blocked");
-                return "index";
+                return "redirect:/cpanel/";
             }
         } else {
             md.addAttribute("msg", "Wrong Username");
-            return "index";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -155,7 +214,7 @@ public class Main_Controller {
     @RequestMapping("/logout")
     public String logout(HttpSession ses, Model md) {
         if (ses.getAttribute("username") != null) {
-          
+
             java.util.Date date = new java.sql.Date(new java.util.Date().getTime());
             Admin_login_entity al = new Admin_login_entity(ses.getAttribute("logindate").toString(), 0);
             al.setUsername(ses.getAttribute("username").toString());
@@ -167,45 +226,60 @@ public class Main_Controller {
                 return "redirect:/cpanel/dashboard";
             }
         } else {
-            return "index";
+            return "redirect:/cpanel/";
         }
     }
 
     @RequestMapping("/viewadmin")
     public String viewadmin(HttpSession ses, Model md) {
-        md.addAttribute("list", dao.getAlladmindata());
-        return "viewadmin";
+        if (ses.getAttribute("username") != null) {
+            md.addAttribute("list", dao.getAlladmindata());
+            return "viewadmin";
+        } else {
+            return "redirect:/cpanel/";
+        }
+    }
+
+    @RequestMapping("/adminprofile")
+    public String adminprofile(HttpSession ses, Model md, @RequestParam("id") int id) {
+        if (ses.getAttribute("username") != null) {
+            if (dao.getdatabyadminid(id) != null) {
+                Admin_login_entity ae = dao.getdatabyadminid(id);
+                if (ae != null) {
+                    md.addAttribute("x", ae);
+                    return "adminprofile";
+                }
+            }
+            return "redirect:/cpanel/viewadmin";
+        } else {
+            return "redirect:/cpanel/";
+        }
     }
 
     @RequestMapping("/admininfo")
     public String admininfo(HttpSession ses, Model md, @RequestParam("id") int id) {
-        if (dao.getdatabyadminid(id) != null) {
-            Admin_login_entity ae = dao.getdatabyadminid(id);
-            if (ae != null) {
-                md.addAttribute("x", ae);
-                return "admininfo";
+        if (ses.getAttribute("username") != null) {
+            if (dao.getdatabyadminid(id) != null) {
+                Admin_login_entity ae = dao.getdatabyadminid(id);
+                if (ae != null) {
+                    md.addAttribute("x", ae);
+                    return "admininfo";
+                }
             }
+            return "redirect:/cpanel/viewadmin";
+        } else {
+            return "redirect:/cpanel/";
         }
-        return "redirect:/cpanel/viewadmin";
     }
 
     @RequestMapping("/deleteadmin")
     public String deleteadmin(HttpSession ses, @RequestParam("id") int id,
-            @RequestParam("username") String username,
-          Model md) {
+            Model md) {
         if (ses.getAttribute("username") != null) {
-            Admin_entity asd = new Admin_entity();
-            Admin_login_entity ale = new Admin_login_entity();
-            Admin_logindetails_entity ald=new Admin_logindetails_entity();
-            asd.setAdmin_id(id);
-            ale.setAdmin_id(asd);
-            ald.setAdminlogin(ale);
-            
-            if (dao.deleteadmin(ale)) {
-//                login_entity ld = new login_entity(adminid);
-//                if (dao.deleteloginadmin(ld)) {
-                    md.addAttribute("msg", "Data Deleted");
-//                }
+            Admin_login_entity asd = dao.getdatabyadminid(id);
+            asd.getLed().clear();
+            if (dao.deleteadmin(asd)) {
+                md.addAttribute("msg", "Data Deleted");
             }
             return "redirect:/cpanel/viewadmin";
         } else {
@@ -215,7 +289,7 @@ public class Main_Controller {
     }
 
     @RequestMapping(value = "/blockadmin")
-    public String blockadmin(HttpSession ses,@RequestParam("id") int id, Model md) {
+    public String blockadmin(HttpSession ses, @RequestParam("id") int id, Model md) {
         if (ses.getAttribute("username") != null) {
             Admin_entity ad = new Admin_entity();
             ad.setAdmin_id(id);
@@ -228,6 +302,7 @@ public class Main_Controller {
             return "redirect:/cpanel/";
         }
     }
+
     @RequestMapping(value = "/unblockadmin")
     public String unblockadmin(HttpSession ses, @RequestParam("id") int id, Model md) {
         if (ses.getAttribute("username") != null) {
@@ -242,31 +317,7 @@ public class Main_Controller {
             return "redirect:/cpanel/";
         }
     }
-//    @RequestMapping("/showalldata")
-//    public String viewalldata(HttpSession ses, Model md, @RequestParam("id") String id, @RequestParam("admin_id") String admin_id) {
-//        if (ses.getAttribute("username") != null) {
-//            admin_entity ad = new admin_entity(Integer.parseInt(id), admin_id);
-//            if (dao.showalldata(ad) != null) {
-//                md.addAttribute("x", dao.showalldata(ad));
-//            }
-//            return "showalldata";
-//        } else {
-//            return "redirect:/cpanel/";
-//        }
-//    }
-//    //Last Login Details
-//    @RequestMapping("/showlogindetails")
-//    public String showlogindetails(HttpSession ses, Model md, @RequestParam("id") String id) {
-//        if (ses.getAttribute("username") != null) {
-//            adminlogin_details ald = new adminlogin_details(id);
-//            if (dao.showlogindetails(ald) != null) {
-//                md.addAttribute("list", dao.showlogindetails(ald));
-//            }
-//            return "showlogindetails";
-//        } else {
-//            return "redirect:/cpanel/";
-//        }
-//    }
+
     //update admin
     @RequestMapping("/updateadmin")
     public String updateadmin(HttpSession ses, Model md, @RequestParam("id") int id) {
@@ -287,10 +338,10 @@ public class Main_Controller {
             @RequestParam("id") String id) {
         if (ses.getAttribute("username") != null) {
             ad.setAdmin_id(Integer.parseInt(id));
-            Admin_entity adm=dao.getbyadminid(Integer.parseInt(id));
+            Admin_entity adm = dao.getbyadminid(Integer.parseInt(id));
             ad.setCreated_at(adm.getCreated_at());
             ServletContext context = ses.getServletContext();
-            String path = context.getRealPath("") + "resources/images";
+            String path = context.getRealPath("") + "resources/images/admin";
             String ext = FilenameUtils.getExtension(file.getOriginalFilename());
             String filename = UUID.randomUUID().toString();
             File f1 = new File(path + "/" + filename + "." + ext);
@@ -302,8 +353,7 @@ public class Main_Controller {
             if (!file.isEmpty() && file.getSize() != 0) {
                 ad.setImage(filename + "." + ext);
                 ses.setAttribute("image", filename + "." + ext);
-            }
-            else{
+            } else {
                 ad.setImage(adm.getImage());
             }
             ad.setStatus(adm.getStatus());
@@ -312,7 +362,7 @@ public class Main_Controller {
 
             return "redirect:/cpanel/viewadmin";
         } else {
-            return "index";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -329,14 +379,32 @@ public class Main_Controller {
 //        }
 //    }
     @RequestMapping("/customerdetails")
-    public String customerdetails(Model md){
-        md.addAttribute("clist", dao.getallcustomer());
-        return "customerdetails";
+    public String customerdetails(Model md, HttpSession ses) {
+        if (ses.getAttribute("username") != null) {
+            md.addAttribute("clist", dao.getallcustomer());
+            return "customerdetails";
+        } else {
+            return "redirect:/cpanel/";
+        }
     }
-    
+
     @RequestMapping("/orderdetails")
-    public String orderdetails(Model md){
-        md.addAttribute("odlist", dao.getorderdetails());
-        return "orderdetails";
+    public String orderdetails(Model md, HttpSession ses) {
+        if (ses.getAttribute("username") != null) {
+            md.addAttribute("odlist", dao.getorderdetails());
+            return "orderdetails";
+        } else {
+            return "redirect:/cpanel/";
+        }
+    }
+
+    @RequestMapping("/deliver")
+    public String deliver(Model md, HttpSession ses, @RequestParam("id") int id, @RequestParam("status") int status) {
+        if (ses.getAttribute("username") != null) {
+            dao.verifydelivery(id, status);
+            return "redirect:/cpanel/orderdetails";
+        } else {
+            return "redirect:/cpanel/";
+        }
     }
 }

@@ -6,6 +6,7 @@
 package com.spring.Ecom_Entity;
 
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,6 +23,34 @@ import javax.persistence.Table;
 @Entity
 @Table(name="tbl_product")
 public class Product_entity {
+
+    /**
+     * @return the discount
+     */
+    public int getDiscount() {
+        return discount;
+    }
+
+    /**
+     * @param discount the discount to set
+     */
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    /**
+     * @return the discount_price
+     */
+    public double getDiscount_price() {
+        return discount_price;
+    }
+
+    /**
+     * @param discount_price the discount_price to set
+     */
+    public void setDiscount_price(double discount_price) {
+        this.discount_price = discount_price;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -50,14 +79,18 @@ public class Product_entity {
     private String product_size;
     private String product_color;
     private int product_price;
+    private int discount;
+    private double discount_price;
     private int publication_status;
     private int product_quantity;
+    @Column(columnDefinition = "boolean")
+    private boolean flag;
 
     public Product_entity() {
 
     }
 
-    public Product_entity(int id, List<Order_details_entity> details, Category_entity category, Sub_category_entity sub_category, Manufacture_entity manufacture, List<Image_Entity> images, String product_name, String short_description, String long_description, String product_image, String product_size, String product_color, int product_price, int publication_status, int product_quantity) {
+    public Product_entity(int id, List<Order_details_entity> details, Category_entity category, Sub_category_entity sub_category, Manufacture_entity manufacture, List<Image_Entity> images, String product_name, String short_description, String long_description, String product_image, String product_size, String product_color, int product_price, int discount, double discount_price, int publication_status, int product_quantity, boolean flag) {
         this.id = id;
         this.details = details;
         this.category = category;
@@ -71,9 +104,14 @@ public class Product_entity {
         this.product_size = product_size;
         this.product_color = product_color;
         this.product_price = product_price;
+        this.discount = discount;
+        this.discount_price = discount_price;
         this.publication_status = publication_status;
         this.product_quantity = product_quantity;
+        this.flag = flag;
     }
+
+    
 
    
     /**
@@ -284,5 +322,19 @@ public class Product_entity {
      */
     public void setDetails(List<Order_details_entity> details) {
         this.details = details;
+    }
+
+    /**
+     * @return the flag
+     */
+    public boolean isFlag() {
+        return flag;
+    }
+
+    /**
+     * @param flag the flag to set
+     */
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

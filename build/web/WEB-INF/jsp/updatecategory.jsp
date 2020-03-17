@@ -22,7 +22,7 @@
 						</div>
 					</div>
 					<div class="box-content">
-                                            <form id="form-valid" class="form-horizontal" method="post" action="${pageContext.servletContext.contextPath}/category/_updatecategory?category_id=${x.category_id}">
+                                            <form id="form-valid" class="form-horizontal" method="post" action="${pageContext.servletContext.contextPath}/category/_updatecategory?id=${x.id}">
                                                     
 							<div class="control-group">
 							  <label class="control-label" for="category_name">Category Name</label>
@@ -48,7 +48,7 @@
                                                             </div>
                                                         </div>
 							<div class="form-actions">
-                                                            <button type="submit"  class="btn btn-primary" id="submit" name="submit">Register</button>
+                                                            <button type="submit"  class="btn btn-primary" id="submit" name="submit">Update</button>
                                                             <button type="reset" class="btn">Cancel</button>
 							</div>
                                                       

@@ -61,6 +61,12 @@
                         </div>
                     </div>  
                     <div class="control-group">
+                        <label class="control-label" for="discount">Discount(%)</label>
+                        <div class="controls">
+                            <input type="text"  name="discount"> %
+                        </div>
+                    </div>  
+                    <div class="control-group">
                         <label class="control-label" for="product_name">Product Size</label>
                         <div class="controls">
                             <input type="text"  name="product_size">

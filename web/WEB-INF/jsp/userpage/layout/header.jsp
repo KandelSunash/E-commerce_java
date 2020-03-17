@@ -92,32 +92,32 @@
         </script>
         <!-- //smooth-scrolling-of-move-up -->
         <script src="${pageContext.servletContext.contextPath}/resources/user/js/bootstrap.js"></script>	
-<!--        <script type="text/javascript">
-	$(document).ready(function() {
-	
-		var defaults = {
-			containerID: 'toTop', // fading element id
-			containerHoverID: 'toTopHover', // fading element hover id
-			scrollSpeed: 1200,
-			easingType: 'linear' 
-		};
-		
-		$().UItoTop({ easingType: 'easeOutQuart' });
-		
-	});
-</script>-->
-<!-- //smooth-scrolling-of-move-up -->  
-<!-- the jScrollPane script -->
-<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/user/js/jquery.jscrollpane.min.js"></script>
-<script type="text/javascript" id="sourcecode">
-	$(function()
-	{
-		$('.scroll-pane').jScrollPane();
-	});
-</script>
-<!-- //the jScrollPane script -->
-<script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/user/js/jquery.mousewheel.js"></script>
-<!-- the mousewheel plugin --> 
+        <!--        <script type="text/javascript">
+                $(document).ready(function() {
+                
+                        var defaults = {
+                                containerID: 'toTop', // fading element id
+                                containerHoverID: 'toTopHover', // fading element hover id
+                                scrollSpeed: 1200,
+                                easingType: 'linear' 
+                        };
+                        
+                        $().UItoTop({ easingType: 'easeOutQuart' });
+                        
+                });
+        </script>-->
+        <!-- //smooth-scrolling-of-move-up -->  
+        <!-- the jScrollPane script -->
+        <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/user/js/jquery.jscrollpane.min.js"></script>
+        <script type="text/javascript" id="sourcecode">
+                    $(function ()
+                    {
+                        $('.scroll-pane').jScrollPane();
+                    });
+        </script>
+        <!-- //the jScrollPane script -->
+        <script type="text/javascript" src="${pageContext.servletContext.contextPath}/resources/user/js/jquery.mousewheel.js"></script>
+        <!-- the mousewheel plugin --> 
     </head>
     <body>
         <!--        <div class="agileits-modal modal fade" id="myModal88" tabindex="-1" role="dialog" aria-labelledby="myModal88"
@@ -149,7 +149,7 @@
             <div class="header-two"><!-- header-two -->
                 <div class="container">
                     <div class="header-logo">
-                        <h1><a href="${pageContext.servletContext.contextPath}/"><span>S</span>mart <i>Bazaar</i></a></h1>
+                        <h1><a href="${pageContext.servletContext.contextPath}/"><span>S</span>aman <i>Sanchar</i></a></h1>
                         <h6>Your stores. Your place.</h6> 
                     </div>	
                     <div class="header-search">
@@ -161,25 +161,35 @@
                         </form>
                     </div>
                     <div class="header-cart"> 
-                      
-                         <div class="my-account"> 
-                             <ul style="list-style: none">
-                                    <li class="dropdown head-dpdn">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i> My Account<span class="caret"></span></a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="${pageContext.servletContext.contextPath}/userlogin">Login </a></li> 
-                                            <li><a href="${pageContext.servletContext.contextPath}/usersignup">Sign Up</a></li> 
-                                            <li><a href="#">My Orders</a></li>  
-                                        </ul> 
-                                    </li> 
-                                </ul>
+
+                        <div class="my-account"> 
+                            <ul style="list-style: none">
+                                <% if (session.getAttribute("userlogin") != null) { %>
+                                <li class="dropdown head-dpdn">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><%= session.getAttribute("customer_name") %><span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#">My Orders</a></li>  
+                                    </ul> 
+                                </li> 
+                                <%} else {%>
+                                <li class="dropdown head-dpdn">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i> My Account<span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="${pageContext.servletContext.contextPath}/userlogin">Login </a></li> 
+                                        <li><a href="${pageContext.servletContext.contextPath}/usersignup">Sign Up</a></li> 
+                                        <li><a href="#">My Orders</a></li>  
+                                    </ul> 
+                                </li> 
+                                <%}%>
+                            </ul>
                             <div class="clearfix"> </div> 
                         </div>
-                       
+
                         <div class="cart"> 
                             <form action="#" method="post" class="last"> 
                                 <input type="hidden" name="cmd" value="_cart" />
                                 <input type="hidden" name="display" value="1" />
+                                <input type="hidden" name="naz" value="id" /> 
                                 <button class="w3view-cart" type="submit" name="submit" value=""><i class="fa fa-cart-arrow-down" aria-hidden="true"></i></button>
                             </form>  
                         </div>
@@ -208,7 +218,7 @@
                                                         <ul class="is-hidden"> 
                                                             <!--                                                    <li class="go-back"><a href="#">All Electronics</a></li> -->
                                                             <c:forEach items="${x.sub_category}" var="y">
-                                                                <li><a href="products.html">${y.sub_name}</a></li> 
+                                                                <li><a href="${pageContext.servletContext.contextPath}/product/getproductdata2?key=${y.id}&name=${x.category_name}">${y.sub_name}</a></li> 
                                                                 </c:forEach>
                                                         </ul>
                                                     </li> 

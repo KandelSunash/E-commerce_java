@@ -91,9 +91,9 @@
                         <div class="controls">
                             <select data-rel="chosen" name="access_label" >
                                 <option disabled="" selected="">Choose Role</option>
-                                <option>Super_admin</option>
+                                <option>Super Admin</option>
                                 <option>Manager</option>
-                                <option>Staff</option>
+                                <option>Customer Manager</option>
 
                             </select>
                             <span style="margin-left: 10px;" id="selection"></span> 

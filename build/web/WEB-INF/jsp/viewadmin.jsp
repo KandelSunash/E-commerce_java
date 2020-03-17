@@ -65,10 +65,10 @@
                                             <li><a class="btn btn-info" href="${pageContext.servletContext.contextPath}/cpanel/updateadmin?id=${x.adminid.admin_id}">
                                                     <i class="halflings-icon white edit"></i>Update  
                                                 </a></li>
-<!--                                            <li><a class="btn btn-warning" href="${pageContext.servletContext.contextPath}/cpanel/deleteadmin?id=${x.adminid.admin_id}&username=${x.username}" onclick="return confirm('Are you sure you want delete?')">
+                                            <li><a class="btn btn-warning" href="${pageContext.servletContext.contextPath}/cpanel/deleteadmin?id=${x.adminid.admin_id}" onclick="return confirm('Are you sure you want delete?')">
                                                     <i class="halflings-icon white trash"></i> Delete
                                                 </a>
-                                            </li>-->
+                                            </li>
 
                                             <li ${x.adminid.status==0?"":"hidden"}><a class="btn btn-danger" href="${pageContext.servletContext.contextPath}/cpanel/blockadmin?id=${x.adminid.admin_id}"><i class="halflings-icon ban-circle"></i> Block</a></li>
                                             <li class="divider"></li>

@@ -39,9 +39,10 @@ public class Manufacture_entity implements Serializable {
     @JoinTable(name="tbl_category_manufacture",joinColumns = @JoinColumn(name = "manufacture_id"), 
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category_entity> category;
-    
     @OneToMany(mappedBy = "manufacture",fetch = FetchType.EAGER)
     private List<Product_entity> product1;
+    @Column(columnDefinition = "boolean")
+    private boolean flag;
     
     public Manufacture_entity() {
     }
@@ -58,13 +59,14 @@ public class Manufacture_entity implements Serializable {
         this.category = category;
     }
 
-    public Manufacture_entity(int id, String manufacture_name, String manufacture_description, int publication_status, List<Category_entity> category, List<Product_entity> product1) {
+    public Manufacture_entity(int id, String manufacture_name, String manufacture_description, int publication_status, List<Category_entity> category, List<Product_entity> product1, boolean flag) {
         this.id = id;
         this.manufacture_name = manufacture_name;
         this.manufacture_description = manufacture_description;
         this.publication_status = publication_status;
         this.category = category;
         this.product1 = product1;
+        this.flag = flag;
     }
 
    
@@ -151,6 +153,20 @@ public class Manufacture_entity implements Serializable {
      */
     public void setProduct(List<Product_entity> product1) {
         this.product1 = product1;
+    }
+
+    /**
+     * @return the flag
+     */
+    public boolean isFlag() {
+        return flag;
+    }
+
+    /**
+     * @param flag the flag to set
+     */
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
 }

@@ -7,6 +7,7 @@ package com.spring.Ecom_Controller;
 
 import com.spring.Ecom_Entity.Customer_Entity;
 import com.spring.Ecom_Interface.Category_interf;
+import com.spring.Ecom_Interface.Product_interf;
 import com.spring.Ecom_Interface.User_interf;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -28,6 +29,9 @@ public class User_Controller {
     Category_interf catedao;
     
     @Autowired
+    Product_interf prdao;
+    
+    @Autowired
     User_interf usdao;
     
     @Autowired
@@ -37,6 +41,7 @@ public class User_Controller {
     public String userindex(Model md)
     {
         md.addAttribute("list", catedao.getallcategory());
+        md.addAttribute("product", prdao.getallproduct());
         return "/userpage/index";
     }
     
@@ -81,8 +86,10 @@ public class User_Controller {
             @RequestParam("password") String password,
             @RequestParam("buy") boolean buy,
             HttpSession ses){
-        if(usdao.getonline(email, password)!=null){
-            ses.setAttribute("userlogin",usdao.getonline(email, password));
+        Customer_Entity cu=usdao.getonline(email, password);
+        if(cu!=null){
+            ses.setAttribute("userlogin",cu);
+            ses.setAttribute("customer_name", cu.getFirst_name());
             if(buy){
                 int id=Integer.parseInt(ses.getAttribute("product_id").toString());
                 

@@ -38,7 +38,7 @@ public class Manufacture_Controller {
             md.addAttribute("list", lis);
             return "addmanufacture";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -59,7 +59,7 @@ public class Manufacture_Controller {
             }
             return "redirect:/manufacture/";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -70,7 +70,7 @@ public class Manufacture_Controller {
             md.addAttribute("list", mfdao.getallmanufacture());
             return "viewmanufacture";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -82,24 +82,38 @@ public class Manufacture_Controller {
             md.addAttribute("clist", mfdao.getcategorylist());
             return "updatemanufacture";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
     @RequestMapping(value = "/_updatemanufacture", method = RequestMethod.POST)
-    public String _updatemanufacture(HttpSession ses, @ModelAttribute Manufacture_entity mf, Model md) {
+    public String _updatemanufacture(HttpSession ses, @ModelAttribute Manufacture_entity mf,@RequestParam("categ") List<String> cdata, Model md) {
         if (ses.getAttribute("username") != null) {
-            Manufacture_entity me = mfdao.getbymanufactureid(0);
+            List<Category_entity> clist = new ArrayList<>();
+            for (String ob : cdata) {
+                Category_entity mfe = mfdao.getbycategoryid(Integer.parseInt(ob));
+                clist.add(mfe);
+            }
+            Manufacture_entity me = mfdao.getbymanufactureid(mf.getId());
             if (me != null) {
+                mf.setCategory(clist);
+                mf.setFlag(me.isFlag());
                 if (mfdao.updatemanufacture(mf)) {
-                    md.addAttribute("id", "dsf");
-                    return "redirect:/updatemanufacture";
+                    md.addAttribute("msg", "data updated");
                 }
             }
-            return "redirect:/viewmanufacture";
+            return "redirect:/manufacture/viewmanufacture";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
-
+    @RequestMapping("/deletemanufacture")
+    public String deletemanufacture(HttpSession ses,@RequestParam("id") int id,Model md){
+        if(ses.getAttribute("username")!=null){
+            mfdao.deletemanufacture(id);
+            return "redirect:/manufacture/viewmanufacture";
+        }else{
+            return "redirect:/cpanel/";
+        }
+    }
 }

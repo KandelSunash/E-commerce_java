@@ -35,13 +35,15 @@ public class Sub_category_entity implements Serializable {
     
     @Column(columnDefinition = "text")
     private String sub_desc;
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.EAGER)
     @JoinColumn(name="category_id",referencedColumnName = "id")
     private Category_entity category;
     
     @OneToMany(mappedBy = "sub_category",fetch = FetchType.LAZY)
     private List<Product_entity> product;
     private int publication_status;
+    @Column(columnDefinition = "boolean")
+    private boolean flag;
 
     public Sub_category_entity() {
     }
@@ -50,25 +52,24 @@ public class Sub_category_entity implements Serializable {
         this.sub_name = sub_name;
     }
 
-    public Sub_category_entity(int id, String sub_name, String sub_desc, Category_entity category, int publication_status) {
+    public Sub_category_entity(int id, String sub_name, String sub_desc, Category_entity category, int publication_status, boolean flag) {
         this.id = id;
         this.sub_name = sub_name;
         this.sub_desc = sub_desc;
         this.category = category;
         this.publication_status = publication_status;
-    }
+        this.flag = flag;
+    }    
 
-    public Sub_category_entity(int id, String sub_name, String sub_desc, Category_entity category, List<Product_entity> product, int publication_status) {
+    public Sub_category_entity(int id, String sub_name, String sub_desc, Category_entity category, List<Product_entity> product, int publication_status, boolean flag) {
         this.id = id;
         this.sub_name = sub_name;
         this.sub_desc = sub_desc;
         this.category = category;
         this.product = product;
         this.publication_status = publication_status;
-    }
-
-    
-
+        this.flag = flag;
+    }    
     
     /**
      * @return the id
@@ -152,6 +153,20 @@ public class Sub_category_entity implements Serializable {
      */
     public void setProduct(List<Product_entity> product) {
         this.product = product;
+    }
+
+    /**
+     * @return the flag
+     */
+    public boolean isFlag() {
+        return flag;
+    }
+
+    /**
+     * @param flag the flag to set
+     */
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
    

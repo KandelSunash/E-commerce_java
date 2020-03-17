@@ -81,11 +81,9 @@
                             <div class="controls">
                                 <select id="selectError2" data-rel="chosen" name="access_label">
                                     <option>Choose Role</option>
-                                    <option ${x.access_label.equalsIgnoreCase("Super_admin")?"selected":" " }>Super_admin</option>
-                                    <option ${x.access_label.equalsIgnoreCase("Admin")?"selected":" " }>Admin</option>
-                                    <option ${x.access_label.equalsIgnoreCase("Exam form_admin")?"selected":" " }>Exam form_admin</option>
-                                    <option ${x.access_label.equalsIgnoreCase("Marks fillup_admin")?"selected":" " }>Marks fillup_admin</option>
-                                    <option ${x.access_label.equalsIgnoreCase("Event manager")?"selected":" " }>Event manager</option>
+                                    <option ${x.access_label.equalsIgnoreCase("Super Admin")?"selected":" " }>Super Admin</option>
+                                    <option ${x.access_label.equalsIgnoreCase("Manager")?"selected":" " }>Manager</option>
+                                    <option ${x.access_label.equalsIgnoreCase("Customer Manager")?"selected":" " }>Customer Manager</option>
                                 </select>
                             </div>
                         </div>

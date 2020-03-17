@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="box-content">
-                <form  class="form-horizontal" method="post" action="${pageContext.servletContext.contextPath}/manufacture/_updatemanufacture">
+                <form  class="form-horizontal" method="post" action="${pageContext.servletContext.contextPath}/manufacture/_updatemanufacture?id=${manufact.id}">
 
                     <div class="control-group">
                         <label class="control-label" for="manufacture_name">Manufacture Name</label>
@@ -43,11 +43,11 @@
                             <select id="selectError1" multiple data-rel="chosen" name="categ">
 
                                 <c:forEach items="${clist}" var="x">
-                                    <% int ind=0; %>
+                                   
                                     <c:forEach items="${manufact.category}" var="y">
-                                        <% if(ind==0) {%>
+                                       
                                         <option ${x.id==y.id?"selected":""} value="${x.id}">${x.category_name}</option>
-                                        <%} ind ++;%>
+                                        
                                     </c:forEach>
                                 </c:forEach>
                             </select>
@@ -57,15 +57,15 @@
                         <label class="control-label">Status</label>
                         <div class="controls">
                             <label class="radio">
-                                <input   name="publication_status" type="radio" value="1" ${manufact.publication_status==1?"class='checked' checked":""}>Active
+                                <input   name="publication_status" type="radio" value="0" ${manufact.publication_status==0?"class='checked' checked":""}>Active
                             </label>
                             <label class="radio" style="margin-top: 5px;">
-                                <input name="publication_status" type="radio" value="0" ${manufact.publication_status==0?"class='checked' checked":""}>Inactive
+                                <input name="publication_status" type="radio" value="1" ${manufact.publication_status==1?"class='checked' checked":""}>Inactive
                             </label>
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="submit"  class="btn btn-primary" id="submit" name="submit">Register</button>
+                        <button type="submit"  class="btn btn-primary" id="submit" name="submit">Update</button>
                         <button type="reset" class="btn">Cancel</button>
                     </div>
 

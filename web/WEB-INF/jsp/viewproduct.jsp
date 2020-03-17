@@ -46,7 +46,7 @@
                                 <td><%= id++%></td>
                                 <td class="center">${x.product_name}</td>
                                 <td class="center">${x.short_description}</td>
-                                <td class="center"><img style="height: 200px; width: 200px;" src="${pageContext.servletContext.contextPath}/resources/images/product/${x.product_image}"></td>
+                                <td class="center"><img style="height: 80px; width: auto;" src="${pageContext.servletContext.contextPath}/resources/images/product/${x.product_image}"></td>
                                 <td class="center">${x.product_price}</td>
                                 <td class="center">
                                     <span class="label ${x.publication_status==0?"label-success":"label-danger"}">${x.publication_status==0?"Active":"InActive"}</span>
@@ -57,10 +57,10 @@
                                         <button class="btn btn-primary">Option</button>
                                         <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="btn btn-info" href="${pageContext.servletContext.contextPath}/category/updateproduct?id=${x.id}">
+                                            <li><a class="btn btn-info" href="${pageContext.servletContext.contextPath}/product/updateproduct?id=${x.id}">
                                                     <i class="halflings-icon white edit"></i>Update  
                                                 </a></li>
-                                            <li><a class="btn btn-warning" href="${pageContext.servletContext.contextPath}/category/deleteproduct?id=${x.id}" onclick="return confirm('Are you sure you want delete?')">
+                                            <li><a class="btn btn-warning" href="${pageContext.servletContext.contextPath}/product/deleteproduct?id=${x.id}" onclick="return confirm('Are you sure you want delete?')">
                                                     <i class="halflings-icon white trash"></i> Delete
                                                 </a>
                                             </li>

@@ -40,7 +40,7 @@ public class Manufacture_impl implements Manufacture_interf{
 
     @Override
     public List<Manufacture_entity> getallmanufacture() {
-        List<Manufacture_entity> li=sessionFactory.getCurrentSession().createQuery("from Manufacture_entity").list();
+        List<Manufacture_entity> li=sessionFactory.getCurrentSession().createQuery("from Manufacture_entity where flag=:x").setParameter("x", false).list();
         return li;
     }
 
@@ -52,13 +52,13 @@ public class Manufacture_impl implements Manufacture_interf{
 
     @Override
     public boolean updatemanufacture(Manufacture_entity mf) {
-        sessionFactory.getCurrentSession().update(mf);
+        sessionFactory.getCurrentSession().saveOrUpdate(mf);
         return true;
     }
 
     @Override
     public List<Category_entity> getcategorylist() {
-        Query qu=sessionFactory.getCurrentSession().createQuery("from Category_entity");
+        Query qu=sessionFactory.getCurrentSession().createQuery("from Category_entity where flag=:x").setParameter("x", false);
         qu.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         List<Category_entity> li=qu.list();
         return li;
@@ -68,6 +68,17 @@ public class Manufacture_impl implements Manufacture_interf{
     public Category_entity getbycategoryid(int id) {
         Category_entity ca=(Category_entity)sessionFactory.getCurrentSession().get(Category_entity.class, id);
         return ca;
+    }
+
+    @Override
+    public boolean deletemanufacture(int id) {
+        temp = false;
+        int i = sessionFactory.getCurrentSession().createQuery("update Manufacture_entity set flag=:x where id=:y").setParameter("x", true)
+                .setParameter("y", id).executeUpdate();
+        if (i > 0) {
+            temp = true;
+        }
+        return temp;
     }
     
 }

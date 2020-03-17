@@ -28,4 +28,6 @@ public interface Manufacture_interf {
     //Update Database
     boolean updatemanufacture(Manufacture_entity mf);
     
+    //Delete Manufacture
+    boolean deletemanufacture(int id);
 }

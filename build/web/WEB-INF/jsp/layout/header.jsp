@@ -60,7 +60,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </a>
-                    <a class="brand" href="index.html"><span>Metro</span></a>
+                    <a class="brand" href="${pageContext.servletContext.contextPath}/cpanel/dashboard"><span>Saman Sanchar</span></a>
 
                     <!-- start: Header Menu -->
                     <div class="nav-no-collapse header-nav">
@@ -320,7 +320,7 @@
                                     <li class="dropdown-menu-title">
                                         <span>Account Settings</span>
                                     </li>
-                                    <li><a href="${pageContext.servletContext.contextPath}/cpanel/admininfo?id=<%=session.getAttribute("admid")%>"><i class="halflings-icon user"></i> Profile</a></li>
+                                    <li><a href="${pageContext.servletContext.contextPath}/cpanel/adminprofile?id=<%=session.getAttribute("admid")%>"><i class="halflings-icon user"></i> Profile</a></li>
                                     <li><a href="${pageContext.servletContext.contextPath}/cpanel/logout"><i class="halflings-icon off"></i> Logout</a></li>
                                 </ul>
                             </li>
@@ -341,7 +341,8 @@
                 <div id="sidebar-left" class="span2">
                     <div class="nav-collapse sidebar-nav">
                         <ul class="nav nav-tabs nav-stacked main-menu">
-                            <li><a href="${pageContext.servletContext.contextPath}/capnel/dashboard"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>	
+                            <li><a href="${pageContext.servletContext.contextPath}/cpanel/dashboard"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>	
+                                        <% if (session.getAttribute("role").equals("Super Admin")) { %>
                             <li>
                                 <a class="dropmenu" href="#"><i class="fa fa-user-circle-o"></i><span class="hidden-tablet"> Admin Management</span></a>
                                 <ul>
@@ -349,12 +350,15 @@
                                     <li><a class="submenu" href="${pageContext.servletContext.contextPath}/cpanel/viewadmin"><i class="fa fa-address-book-o"></i><span class="hidden-tablet"> View Admin</span></a></li>
                                 </ul>	
                             </li>
+                            <%}%>
+                            <% if (session.getAttribute("role").equals("Super Admin") || session.getAttribute("role").equals("Manager")) { %>
                             <li>
                                 <a class="dropmenu" href="#"><i class="icon-th-list"></i><span class="hidden-tablet"> Category Management</span></a>
                                 <ul>
                                     <li><a class="submenu" href="${pageContext.servletContext.contextPath}/category/"><i class="icon-th-large"></i><span class="hidden-tablet"> Add Category</span></a></li>
                                     <li><a class="submenu" href="${pageContext.servletContext.contextPath}/category/subcategory"><i class="icon-th"></i><span class="hidden-tablet"> Add Sub Category</span></a></li>
                                     <li><a class="submenu" href="${pageContext.servletContext.contextPath}/category/viewcategory"><i class="icon-book"></i><span class="hidden-tablet"> View Category</span></a></li>
+                                    <li><a class="submenu" href="${pageContext.servletContext.contextPath}/category/viewsubcategory"><i class="icon-book"></i><span class="hidden-tablet"> View Sub Category</span></a></li>
                                 </ul>	
                             </li>
                             <li>
@@ -364,6 +368,7 @@
                                     <li><a class="submenu" href="${pageContext.servletContext.contextPath}/manufacture/viewmanufacture"><i class="icon-book"></i><span class="hidden-tablet"> View Manufacture</span></a></li>
                                 </ul>	
                             </li>
+                            
                             <li>
                                 <a class="dropmenu" href="#"><i class="icon-leaf"></i><span class="hidden-tablet"> Product Management</span></a>
                                 <ul>
@@ -371,9 +376,11 @@
                                     <li><a class="submenu" href="${pageContext.servletContext.contextPath}/product/viewproduct"><i class="icon-book"></i><span class="hidden-tablet"> View Product</span></a></li>
                                 </ul>	
                             </li>
+                            <%}%>
+                            <%if (session.getAttribute("role").equals("Super Admin") || session.getAttribute("role").equals("Customer Manager")){%>
                             <li><a href="${pageContext.servletContext.contextPath}/cpanel/customerdetails"><i class="icon-group"></i><span class="hidden-tablet"> Customer Detail</span></a></li>
                             <li><a href="${pageContext.servletContext.contextPath}/cpanel/orderdetails"><i class="fa fa-shopping-cart"></i><span class="hidden-tablet"> Order Detail</span></a></li>
-                           
+                                        <%}%>
                         </ul>
                     </div>
                 </div>

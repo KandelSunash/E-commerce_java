@@ -44,24 +44,13 @@ public class Category_entity implements Serializable {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Sub_category_entity> sub_category;
+    @Column(columnDefinition = "boolean")
+    private boolean flag;
 
     public Category_entity() {
     }
 
-    public Category_entity(int id) {
-        this.id = id;
-    }
-
-    public Category_entity(int id, String category_name, String category_description, int publication_status, String created_by, String modified_by) {
-        this.id = id;
-        this.category_name = category_name;
-        this.category_description = category_description;
-        this.publication_status = publication_status;
-        this.created_by = created_by;
-        this.modified_by = modified_by;
-    }
-
-    public Category_entity(int id, String category_name, String category_description, int publication_status, String created_by, String modified_by, List<Manufacture_entity> manufacture, List<Product_entity> product, List<Sub_category_entity> sub_category) {
+    public Category_entity(int id, String category_name, String category_description, int publication_status, String created_by, String modified_by, List<Manufacture_entity> manufacture, List<Product_entity> product, List<Sub_category_entity> sub_category, boolean flag) {
         this.id = id;
         this.category_name = category_name;
         this.category_description = category_description;
@@ -71,7 +60,9 @@ public class Category_entity implements Serializable {
         this.manufacture = manufacture;
         this.product = product;
         this.sub_category = sub_category;
+        this.flag = flag;
     }
+    
 
     /**
      * @return the id
@@ -197,6 +188,20 @@ public class Category_entity implements Serializable {
      */
     public void setProduct(List<Product_entity> product) {
         this.product = product;
+    }
+
+    /**
+     * @return the flag
+     */
+    public boolean isFlag() {
+        return flag;
+    }
+
+    /**
+     * @param flag the flag to set
+     */
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
 }

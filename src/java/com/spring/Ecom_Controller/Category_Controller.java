@@ -36,7 +36,7 @@ public class Category_Controller {
         if (ses.getAttribute("username") != null) {
             return "addcategory";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -46,7 +46,7 @@ public class Category_Controller {
             md.addAttribute("list", catdao.getallmanufactureitems());
             return "addcategory_with_manufacture";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -68,7 +68,7 @@ public class Category_Controller {
             return "redirect:/category/addcategory";
 
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -85,7 +85,7 @@ public class Category_Controller {
                 return "redirect:/category/";
             }
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -98,7 +98,7 @@ public class Category_Controller {
             }
             return "viewcategory";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -113,7 +113,7 @@ public class Category_Controller {
                 return "/category/viewcategory";
             }
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -128,7 +128,17 @@ public class Category_Controller {
             }
             return "redirect:/category/viewcategory";
         } else {
-            return "redirect:/";
+            return "redirect:/cpanel/";
+        }
+    }
+    
+    @RequestMapping("/deletecategory")
+    public String deletecategory(HttpSession ses,@RequestParam("id") int id, Model md){
+        if(ses.getAttribute("username")!=null){
+            catdao.deletecategory(id);
+            return "redirect:/category/viewcategory";
+        }else{
+            return "redirect:/cpanel/";
         }
     }
 
@@ -138,7 +148,7 @@ public class Category_Controller {
             md.addAttribute("list", catdao.getallcategory());
             return "addsubcategory";
         } else {
-            return "index";
+            return "redirect:/cpanel/";
         }
     }
 
@@ -151,7 +161,7 @@ public class Category_Controller {
             Model md) {
         if (ses.getAttribute("username") != null) {
             Category_entity ca = catdao.getbycategoryname(cat);
-            Sub_category_entity sce = new Sub_category_entity(0, name, description, ca, status);
+            Sub_category_entity sce = new Sub_category_entity(0, name, description, ca, status,false);
             if (catdao.addsubcategory(sce)) {
                 md.addAttribute("msg", "Sub Category Register");
             } else {
@@ -159,7 +169,54 @@ public class Category_Controller {
             }
             return "redirect:/category/subcategory";
         } else {
-            return "index";
+            return "redirect:/cpanel/";
+        }
+    }
+    @RequestMapping("/viewsubcategory")
+    public String showsubcategory(HttpSession ses,Model md){
+        if(ses.getAttribute("username")!=null){
+        md.addAttribute("list",  catdao.getallsubcategory());
+        return "viewsubcategory";
+        }else{
+            return "redirect:/cpanel/";
+        }
+    }
+    
+    @RequestMapping("/updatesubcategory")
+    public String updatesubcategory(HttpSession ses, Model md,@RequestParam("id") int id) {
+        if (ses.getAttribute("username") != null) {
+            Sub_category_entity sub=catdao.getbysubcategoryid(id);
+            md.addAttribute("list", catdao.getallcategory());
+            md.addAttribute("sub", sub);
+            return "updatesubcategory";
+        }else{
+            return "redirect:/cpanel/";
+        }
+    }
+    @RequestMapping("/_updatesubcategory")
+    public String _updatesubcategory(HttpSession ses, @ModelAttribute Sub_category_entity su,@RequestParam("cate") int category_id, Model md) {
+        if (ses.getAttribute("username") != null) {
+            Category_entity ca = catdao.getbycategoryid(category_id);
+            Sub_category_entity sub=catdao.getbysubcategoryid(su.getId());
+            if (ca != null) {
+                su.setCategory(ca);
+                su.setFlag(sub.isFlag());
+                catdao.updatesubcategory(su);
+                md.addAttribute("msg", "Updated data");
+            }
+            return "redirect:/category/viewsubcategory";
+        } else {
+            return "redirect:/cpanel/";
+        }
+    }
+    
+    @RequestMapping("/deletesubcategory")
+    public String deletesubcategory(HttpSession ses,@RequestParam("id") int id,Model md){
+        if(ses.getAttribute("username")!=null){
+            catdao.deletesubcategory(id);
+            return "redirect:/category/viewsubcategory";
+        }else{
+            return "redirect:/cpanel/";
         }
     }
 }
